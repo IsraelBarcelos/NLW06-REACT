@@ -15,8 +15,10 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig)
 
-export const auth = firebase.auth();
-export const datasbase = firebase.database();
+const auth = firebase.auth();
+const database = firebase.database();
+
+export { auth, database, firebase}
 
 /*
 <!-- The core Firebase JS SDK is always required and must be listed first -->

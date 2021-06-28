@@ -1,27 +1,57 @@
-import React from 'react';
+import { useHistory } from 'react-router-dom'
+import { auth, firebase } from '../services/firebase';
+
+import "../styles/auth.scss"
+
 import illustrationImg from '../images/illustration.svg'
 import logo from "../images/logo.svg"
 import googleIconImage from "../images/google-icon.svg"
 
+import {Button} from "../components/Button"
+import {TestContext} from '../App'
+
 export function Home() {
+
+  //const history = useHistory();
+  function handleCreateRoom() {
+
+    const provider = new firebase.auth.GoogleAuthProvider();
+    auth.signInWithPopup(provider).then((result) => {
+      console.log(result)
+    }).catch( error => {
+      const {code,message,email,credential} = error
+      console.log(`
+        code = ${code}
+
+        message = ${message}
+
+        email = ${email}
+
+        credential = ${credential}
+      `)
+    })
+
+    // history.push("/rooms/new")
+  }
+
   return(
 
-    <div>
+    <div id="page-auth">
       <aside>
         <img src={illustrationImg} alt="Imagem ao lado esquerdo, roxa" />
         <strong>Crie salas de Q&amp;A ao-vivo</strong>
         <p>Tire as dúvidas da sua audiência em tempo-real</p>
       </aside>
       <main>
-        <div>
+        <div className="main-content">
           <img src={logo} alt="LetMeAsk" />
-          <button>
+          <button onClick={handleCreateRoom}  className="create-room">
             <img src={googleIconImage} alt="Google logo" />
             Crie a sua sala com google
           </button>
-        </div>
+        
 
-        <div>ou entre em uma sala</div>
+        <div className="separator">ou entre em uma sala</div>
 
         <form action="">
           <input 
@@ -29,10 +59,13 @@ export function Home() {
             placeholder="Digite o código da sala"
            />
 
-           <button type="submit">
+           <Button type="submit">
              Entrar na sala
-           </button>
+           </Button>
         </form>
+
+
+        </div>
 
       </main>
 
