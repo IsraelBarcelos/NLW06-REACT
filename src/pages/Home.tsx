@@ -15,21 +15,7 @@ export function Home() {
   //const history = useHistory();
   function handleCreateRoom() {
 
-    const provider = new firebase.auth.GoogleAuthProvider();
-    auth.signInWithPopup(provider).then((result) => {
-      console.log(result)
-    }).catch( error => {
-      const {code,message,email,credential} = error
-      console.log(`
-        code = ${code}
-
-        message = ${message}
-
-        email = ${email}
-
-        credential = ${credential}
-      `)
-    })
+    
 
     // history.push("/rooms/new")
   }
