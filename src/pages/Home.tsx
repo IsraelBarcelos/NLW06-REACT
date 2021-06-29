@@ -1,23 +1,22 @@
 import { useHistory } from 'react-router-dom'
-import { auth, firebase } from '../services/firebase';
+
+import {Button} from "../components/Button"
+import {AuthContext} from '../App'
+import { useContext } from 'react';
 
 import "../styles/auth.scss"
-
 import illustrationImg from '../images/illustration.svg'
 import logo from "../images/logo.svg"
 import googleIconImage from "../images/google-icon.svg"
 
-import {Button} from "../components/Button"
-import {TestContext} from '../App'
-
 export function Home() {
-
-  //const history = useHistory();
-  function handleCreateRoom() {
-
+  const auth = useContext(AuthContext)
+  const history = useHistory();
+  async function handleCreateRoom() {
     
+    await auth.signInWithGoogle() 
 
-    // history.push("/rooms/new")
+    history.push("/rooms/new")
   }
 
   return(
