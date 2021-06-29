@@ -33,6 +33,11 @@ function App() {
         throw new Error("Google account not complete, please insert a image and a displayName")
       }
 
+      setUser({
+        name: displayName,
+        avatar: photoURL,
+        id: uid
+      })
 
     }
 
