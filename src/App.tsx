@@ -1,10 +1,10 @@
-import {createContext, useState} from 'react';
 import { BrowserRouter, Route } from 'react-router-dom'; 
-import { auth, firebase } from './services/firebase'
 
-import {Home} from './pages/Home'
+import { Home } from './pages/Home'
 import { NewRoom } from './pages/NewRoom';
+import { AuthContextProvider } from './contexts/AuthContext'
 
+<<<<<<< HEAD
 
 type User = {
   name: string;
@@ -43,12 +43,15 @@ function App() {
 
   }
 
+=======
+function App() { 
+>>>>>>> 1b7c22297bd44972c7c123977755762fd7b2bdc7
   return (
     <BrowserRouter>
-      <AuthContext.Provider value={{user, signInWithGoogle}}>
+      <AuthContextProvider>
         <Route path="/" exact component={Home} />
         <Route path="/rooms/new" exact component={NewRoom} />
-      </AuthContext.Provider>
+      </AuthContextProvider>
     </BrowserRouter>
   );
 }
