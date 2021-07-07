@@ -1,43 +1,53 @@
 import { useHistory } from 'react-router-dom'
-<<<<<<< HEAD
+import { FormEvent, useState } from 'react'
 
-import {Button} from "../components/Button"
-import {AuthContext} from '../App'
-import { useContext } from 'react';
-=======
-import "../styles/auth.scss"
->>>>>>> 1b7c22297bd44972c7c123977755762fd7b2bdc7
+
+import { Button } from "../components/Button"
+import { useAuth } from '../hooks/useAuth'
+import { database } from '../services/firebase'
 
 import "../styles/auth.scss"
 import illustrationImg from '../images/illustration.svg'
 import logo from "../images/logo.svg"
 import googleIconImage from "../images/google-icon.svg"
 
-<<<<<<< HEAD
-export function Home() {
-  const auth = useContext(AuthContext)
-  const history = useHistory();
-  async function handleCreateRoom() {
-    
-    await auth.signInWithGoogle() 
 
-=======
-import {Button} from "../components/Button"
-import { useAuth } from '../hooks/useAuth'
+
 
 export function Home() {
 
   const history = useHistory();
   const {user, signInWithGoogle} = useAuth()
+  const [room, setRoom] = useState("")
+
   async function handleCreateRoom() {
 
     if(!user){
       await signInWithGoogle()
     }
-    
->>>>>>> 1b7c22297bd44972c7c123977755762fd7b2bdc7
+
     history.push("/rooms/new")
   }
+
+  async function handleEnterRoom(event : FormEvent) {
+    event.preventDefault();
+    
+    if(room.trim() === '') {
+      return;
+    }
+
+    const roomRef = await database.ref(`rooms/${room}`).get()
+
+    if(!roomRef.exists()) {
+      alert('Sala não existe!')
+      return;
+    }
+
+    history.push(`/rooms/${room}`)
+
+  }
+
+  
 
   return(
 
@@ -58,10 +68,12 @@ export function Home() {
 
         <div className="separator">ou entre em uma sala</div>
 
-        <form action="">
+        <form onSubmit={handleEnterRoom}>
           <input 
             type="text"
             placeholder="Digite o código da sala"
+            value={room}
+            onChange={event => {setRoom(event.target.value)}}
            />
 
            <Button type="submit">
