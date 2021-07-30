@@ -25,8 +25,8 @@ type FirebaseQuestions = Record<string, { // record é um objeto que não há ce
   }
 
   content: string;
-  isAnswered: boolean;
   isHighLighted: boolean;
+  isAnswered: boolean;
 }>
 
 type Question = {
@@ -38,8 +38,8 @@ type Question = {
   }
 
   content: string;
+  isHighlighted: boolean;
   isAnswered: boolean;
-  isHighLighted: boolean;
 
 }
 
@@ -48,14 +48,15 @@ export function Room() {
   const { user } = useAuth()
   const params = useParams<RoomParams>();
   const [newQuestion, setNewQuestion] = useState('')
-  const [question, setQuestions] = useState<Question[]>([])
+  const [questions, setQuestions] = useState<Question[]>([])
+  const [title, setTitle] = useState('')
 
   const roomId = params.id;
 
   useEffect(() => {
     const roomRef = database.ref(`rooms/${roomId}`)
 
-    roomRef.once('value', room => {
+    roomRef.on('value', room => {
       const databaseRoom = room.val();
       const firebaseQuestions: FirebaseQuestions = databaseRoom.questions ?? {}
 
@@ -63,12 +64,15 @@ export function Room() {
       const parsedQuestions = Object.entries(firebaseQuestions).map(([key, value]) => {
         return {
           id: key,
-          content: value.content,
           author: value.author,
+          content: value.content,
           isHighlighted: value.isHighLighted,
           isAnswered: value.isAnswered
         }
       })
+
+      setTitle(databaseRoom.title)
+      setQuestions(parsedQuestions)
 
 
 
@@ -88,7 +92,7 @@ export function Room() {
     }
 
     const question = {
-      cotent: newQuestion,
+      content: newQuestion,
       author: {
         name: user.name,
         avatar: user.avatar,
@@ -114,9 +118,9 @@ export function Room() {
 
       <main className="content">
         <div className="room-title">
-          <h1>Sala React</h1>
+          <h1>Sala {title}</h1>
 
-          <span>4 perguntas</span>
+          { questions.length > 0 && <span>{questions.length} pergunta(s)</span> /*if sem else no react*/} 
         </div>
 
         <form onSubmit={handleSendQuestion}>
@@ -137,7 +141,7 @@ export function Room() {
             <Button disabled={!user} type="submit">Enviar pergunta</Button>
           </div>
         </form>
-
+              {JSON.stringify(questions)}
       </main>
 
     </div>
